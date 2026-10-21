@@ -1,14 +1,24 @@
 import pytest 
 from playwright.sync_api import Page
 
-BASE_URL="https://www.saucedemo.com"
-PASSWORD="secret_sauce"
+from data.users import PASSWORD,STANDARD_USER
+from pages.cart_page import CartPage
+from pages.checkout_info_page import CheckoutInfoPage
+from pages.inventory_page import InventoryPage
+from pages.login_page import LoginPage
 
 @pytest.fixture
-def logged_in(page:Page)->Page:
-    page.goto(BASE_URL)
-    page.locator('[data-test="username"]').fill("standard_user")
-    page.locator('[data-test="password"]').fill(PASSWORD)
-    page.locator('[data-test="login-button"]').click()
-    return page
+def login_page(page:Page)->LoginPage:
+    return LoginPage(page).open()
 
+@pytest.fixture
+def inventory_page(page:Page,login_page:LoginPage)->InventoryPage:
+    login_page.login(STANDARD_USER,PASSWORD)
+    return InventoryPage(page)
+
+@pytest.fixture
+def checkout_info_page(page:Page,inventory_page:InventoryPage)->CheckoutInfoPage:
+    inventory_page.add_items(1)
+    inventory_page.open_cart()
+    CartPage(page).checkout()
+    return CheckoutInfoPage(page)

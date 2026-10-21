@@ -1,45 +1,41 @@
 import re
 import pytest
 from playwright.sync_api import Page,expect
+from data.users import PASSWORD,STANDARD_USER
+from pages.inventory_page import InventoryPage
+from pages.login_page import LoginPage
 
-BASE_URL="https://www.saucedemo.com"
-PASSWORD="secret_sauce"
-
-def open_login(page:Page):
-    page.goto(BASE_URL)
-
-def login(page:Page,username:str,password:str):
-    page.locator('[data-test="username"]').fill(username)
-    page.locator('[data-test="password"]').fill(password)
-    page.locator('[data-test="login-button"]').click()
-
-def test_valid_login(page:Page):
-    open_login(page)
-    login(page,"standard_user",PASSWORD)
+@pytest.mark.regression
+@pytest.mark.smoke
+def test_valid_login(page:Page,login_page:LoginPage):
+    login_page.login(STANDARD_USER,PASSWORD)
     expect(page).to_have_url(re.compile("inventory"))
-    expect(page.locator('[data-test="title"]')).to_have_text("Products")
+    expect(InventoryPage(page).title).to_have_text("Products")
 
-def test_locked_out_user(page:Page):
-    open_login(page)
-    login(page,"locked_out_user",PASSWORD)
-    expect(page.locator('[data-test="error"]')).to_contain_text("locked out")
+@pytest.mark.regression
+def test_locked_out_user(page:Page,login_page:LoginPage):
+    
+    login_page.login("locked_out_user",PASSWORD)
+    expect(login_page.error).to_contain_text("locked out")
     expect(page).not_to_have_url(re.compile("inventory"))
 
+@pytest.mark.regression
 @pytest.mark.parametrize(
     "username,password",
     [
-        ("standard_user","wrong_password"),
+        (STANDARD_USER,"wrong_password"),
         ("wrong_user",PASSWORD),
         ("wrong_user","wrong_password"),
     ],
     ids=["wrong_password","wrong_username","both_wrong"],
 )
-def test_invalid_credentials(page:Page,username,password):
-    open_login(page)
-    login(page,username,password)
-    expect(page.locator('[data-test="error"]')).to_contain_text("do not match any user")
+@pytest.mark.regression
+def test_invalid_credentials(page:Page,login_page:LoginPage,username,password):
+    login_page.login(username,password)
+    expect(login_page.error).to_contain_text("do not match any user")
     expect(page).not_to_have_url(re.compile("inventory"))
 
+@pytest.mark.regression
 @pytest.mark.parametrize(
     "username,password,message",
     [
@@ -49,8 +45,8 @@ def test_invalid_credentials(page:Page,username,password):
     ],
     ids=["both_blank", "username_blank", "password_blank"],
 )
-def test_required_fields(page:Page,username,password,message):
-    open_login(page)
-    login(page,username,password)
-    expect(page.locator('[data-test="error"]')).to_contain_text(message)
+@pytest.mark.regression
+def test_required_fields(page:Page,login_page:LoginPage,username,password,message):
+    login_page.login(username,password)
+    expect(login_page.error).to_contain_text(message)
     expect(page).not_to_have_url(re.compile("inventory"))
