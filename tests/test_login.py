@@ -50,3 +50,21 @@ def test_required_fields(page:Page,login_page:LoginPage,username,password,messag
     login_page.login(username,password)
     expect(login_page.error).to_contain_text(message)
     expect(page).not_to_have_url(re.compile("inventory"))
+
+@pytest.mark.regression
+def test_tc_login_05_password_is_masked(login_page:LoginPage):
+    assert login_page.password_type()=="password"
+
+@pytest.mark.regression
+def test_tc_login_06_error_can_be_dismissed(login_page:LoginPage):
+    login_page.login("","")
+    expect(login_page.error).to_be_visible()
+    login_page.dismiss_error()
+    expect(login_page.error).to_have_count(0)
+
+@pytest.mark.regression
+def test_tc_login_07_direct_url_blocked_when_logged_out(page:Page):
+    page.goto("/inventory.html")
+    login_page=LoginPage(page)
+    expect(login_page.error).to_contain_text("when you are logged in")
+    expect(login_page.login_button).to_be_visible()

@@ -7,6 +7,7 @@ class LoginPage:
         self.password=page.locator('[data-test="password"]')
         self.login_button=page.locator('[data-test="login-button"]')
         self.error=page.locator('[data-test="error"]')
+        self.error_close=page.locator('[data-test="error-button"]')
     
     def open(self):
         self.page.goto("https://www.saucedemo.com/")
@@ -16,4 +17,9 @@ class LoginPage:
         self.username.fill(username)
         self.password.fill(password)
         self.login_button.click()
+
+    def dismiss_error(self):
+        self.error_close.click()
+    def password_type(self)->str:
+        return self.password.get_attribute("type")
     

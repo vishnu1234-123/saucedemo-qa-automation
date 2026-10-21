@@ -25,4 +25,15 @@ def test_continue_shopping_return_to_products(page:Page,inventory_page:Inventory
     CartPage(page).continue_shopping()
     expect(inventory_page.title).to_have_text("Products")
     
+@pytest.mark.regression
+def test_tc_cart_04_cart_matches_product_list(page:Page,inventory_page:InventoryPage):
+    name,price=inventory_page.names()[0],inventory_page.prices()[0]
+    inventory_page.add_items(1)
+    inventory_page.open_cart()
+    cart=CartPage(page)
+    assert cart.item_names()==[name]
+    assert cart.item_prices()==[price]
+    assert cart.item_quantities()==["1"]
+
+
 

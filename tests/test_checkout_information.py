@@ -32,4 +32,9 @@ def test_required_fields(page:Page,checkout_info_page:CheckoutInfoPage,first,las
     expect(checkout_info_page.error).to_contain_text(message)
     expect(page).not_to_have_url(re.compile("checkout-step-two"))
 
+@pytest.mark.regression
+def test_tc_chki_02_cancel_returns_to_cart(page:Page,checkout_info_page:CheckoutInfoPage):
+    checkout_info_page.cancel_button.click()
+    expect(page).to_have_url(re.compile(r"cart\.html"))
+
 

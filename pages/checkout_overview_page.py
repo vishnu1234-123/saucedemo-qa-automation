@@ -15,6 +15,7 @@ class CheckoutOverviewPage:
         self.tax = page.locator('[data-test="tax-label"]')
         self.total = page.locator('[data-test="total-label"]')
         self.finish_button = page.locator('[data-test="finish"]')
+        self.cancel_button=page.locator('[data-test="cancel"]')
 
     def amounts(self) -> tuple[float, float, float]:
         return (
@@ -25,3 +26,10 @@ class CheckoutOverviewPage:
 
     def finish(self):
         self.finish_button.click()
+    
+    def item_names(self) -> list[str]:
+        self.finish_button.wait_for()  
+        return self.page.locator('[data-test="inventory-item-name"]').all_inner_texts()
+
+    def cancel(self):
+        self.cancel_button.click()

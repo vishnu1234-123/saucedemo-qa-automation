@@ -10,6 +10,9 @@ class InventoryPage:
         self.cart_link = page.locator('[data-test="shopping-cart-link"]')
         self.menu_button = page.locator("#react-burger-menu-btn")
         self.logout_link = page.locator('[data-test="logout-sidebar-link"]')
+        self.add_buttons=page.locator('[data-test^="add-to-cart"]')
+        self.remove_buttons=page.locator('[data-test^="remove"]')
+        self.reset_link=page.locator('[data-test^="reset-sidebar-link"]')
 
     def add_items(self,count:int):
         adds=self.page.locator('[data-test^="add-to-cart"]')
@@ -31,7 +34,17 @@ class InventoryPage:
 
     def open_cart(self):
         self.cart_link.click()
+        self.page.locator('[data-test="checkout"]').wait_for()
 
     def logout(self):
         self.menu_button.click()
         self.logout_link.click()
+    
+    def reset_app_state(self):
+        self.menu_button.click()
+        self.reset_link.click()
+    
+    def open_first_product(self):
+        self.page.locator('[data-test="inventory-item-name"]').first.click()
+        self.page.locator('[data-test="back-to-products"]').wait_for()    
+

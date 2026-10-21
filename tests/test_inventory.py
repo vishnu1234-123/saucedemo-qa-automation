@@ -1,6 +1,8 @@
 import pytest
+import re
 from playwright.sync_api import Page,expect
 from pages.inventory_page import InventoryPage
+from pages.product_details_page import ProductDetailsPage
 
 
 
@@ -48,5 +50,32 @@ def test_remove_last_item_clears_badge(inventory_page: InventoryPage):
 def test_logout(page,inventory_page:InventoryPage):
     inventory_page.logout()
     expect(page.locator('[data-test="login-button"]')).to_be_visible()
+
+@pytest.mark.regression
+def test_tc_inv_07_open_product_details(page:Page,inventory_page:InventoryPage):
+    name=inventory_page.names()[0]
+    inventory_page.open_first_product()
+    expect(page).to_have_url(re.compile(r"inventory-item\.html"))
+    expect(ProductDetailsPage(page).name).to_have_text(name)
+
+@pytest.mark.regression
+@pytest.mark.xfail(
+    reason="ADO-XXX: buttons still show Remove after Reset App State until reload",
+    strict=True,
+)
+def test_tc_inv_08_reset_app_state_resets_buttons(inventory_page:InventoryPage):
+    inventory_page.add_items(1)
+    inventory_page.reset_app_state()
+    expect(inventory_page.cart_badge).to_have_count(0)
+    expect(inventory_page.remove_buttons).to_have_count(0)
+    expect(inventory_page.add_buttons).to_have_count(6)
+
+def test_tc_inv_09_cart_persists_across_pages(page:Page,inventory_page:InventoryPage):
+    inventory_page.add_items(1)
+    inventory_page.open_first_product()
+    expect(inventory_page.cart_badge).to_have_text("1")
+    ProductDetailsPage(page).back_to_products()
+    expect(inventory_page.cart_badge).to_have_text("1")
+
     
 
