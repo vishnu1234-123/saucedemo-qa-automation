@@ -22,3 +22,8 @@ def test_tc_chkc_02_back_home_returns_to_products(page: Page, checkout_complete_
 @pytest.mark.regression
 def test_tc_chkc_03_cart_empty_after_order(page: Page, checkout_complete_page: CheckoutCompletePage):
     expect(InventoryPage(page).cart_badge).to_have_count(0)
+
+@pytest.mark.regression
+def test_tc_chkc_04_generate_pdf_downloads_file(checkout_complete_page:CheckoutCompletePage):
+    download=checkout_complete_page.download_pdf()
+    assert download.suggested_filename.endswith(".pdf")
