@@ -100,3 +100,22 @@ def test_tc_a11y_11_cart_change_has_status_region(page:Page,inventory_page:Inven
         inventory_page.open_cart()
         CartPage(page).remove_first()
     assert page.locator(STATUS_REGION).count()>0
+
+MENU_LABELS={"All Items","Dynamic Catalog","About","Logout","Reset App State","Close Menu"}
+
+@pytest.mark.xfail(raises=AssertionError,reason="ADO-20: keyboard focus leaves the open menu (2.4.3)",strict=True)
+def test_tc_a11y_04_focus_stays_in_open_menu(page:Page,on_page):
+    if on_page=="login":
+        pytest.skip("no menu in the login page")
+    page.locator("#react-burger-menu-btn").focus()
+    page.keyboard.press("Enter")
+    page.locator('[data-test="logout-sidebar-link"]').wait_for()
+    focused=[]
+    for _ in range(8):
+        page.keyboard.press("Tab")
+        focused.append(
+            "() => { const e = document.activeElement; "
+            "return (e.getAttribute('aria-label') || e.textContent || e.value || '').trim(); }"
+
+        )
+    assert set(focused)<=MENU_LABELS,focused
