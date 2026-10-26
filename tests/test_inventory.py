@@ -60,7 +60,7 @@ def test_tc_inv_07_open_product_details(page:Page,inventory_page:InventoryPage):
 
 @pytest.mark.regression
 @pytest.mark.xfail(
-    reason="ADO-XXX: buttons still show Remove after Reset App State until reload",
+    reason="ADO-35: buttons still show Remove after Reset App State until reload",
     strict=True,
 )
 def test_tc_inv_08_reset_app_state_resets_buttons(inventory_page:InventoryPage):

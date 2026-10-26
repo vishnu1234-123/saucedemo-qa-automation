@@ -26,9 +26,11 @@ class InventoryPage:
         self.sort.select_option(option)
 
     def names(self) -> list[str]:
+        self.items.first.wait_for()
         return self.page.locator('[data-test="inventory-item-name"]').all_inner_texts()
 
     def prices(self) -> list[float]:
+        self.items.first.wait_for()
         texts = self.page.locator('[data-test="inventory-item-price"]').all_inner_texts()
         return [float(t.replace("$", "")) for t in texts]
 

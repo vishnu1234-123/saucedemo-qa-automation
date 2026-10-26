@@ -16,7 +16,9 @@ def login_page(page:Page)->LoginPage:
 @pytest.fixture
 def inventory_page(page:Page,login_page:LoginPage)->InventoryPage:
     login_page.login(STANDARD_USER,PASSWORD)
-    return InventoryPage(page)
+    inventory=InventoryPage(page)
+    inventory.items.first.wait_for()
+    return inventory
 
 @pytest.fixture
 def checkout_info_page(page:Page,inventory_page:InventoryPage)->CheckoutInfoPage:

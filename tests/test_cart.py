@@ -35,5 +35,12 @@ def test_tc_cart_04_cart_matches_product_list(page:Page,inventory_page:Inventory
     assert cart.item_prices()==[price]
     assert cart.item_quantities()==["1"]
 
+@pytest.mark.regression
+@pytest.mark.xfail(reason="ADO-35: cart still lists the item after Reset App State until reload",strict=True)
+def test_tc_cart_05_reset_app_state_empties_cart(page:Page,inventory_page:InventoryPage):
+    inventory_page.add_items(1)
+    inventory_page.open_cart()
+    inventory_page.reset_app_state()
+    expect(CartPage(page).items).to_have_count(0)
 
 
