@@ -9,7 +9,7 @@ pr:
       - main
 
 pool:
-  vmIMgae: ubuntu-latest
+  vmImage: ubuntu-latest
 
 strategy:
   matrix:
