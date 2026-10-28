@@ -16,4 +16,7 @@ class CheckoutCompletePage:
             self.pdf_button.click()
         return info.value
     
+    def reload(self):
+        self.page.reload()
+        self.back_home_button.wait_for()    
 

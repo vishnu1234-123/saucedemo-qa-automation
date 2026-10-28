@@ -27,3 +27,9 @@ def test_tc_chkc_03_cart_empty_after_order(page: Page, checkout_complete_page: C
 def test_tc_chkc_04_generate_pdf_downloads_file(checkout_complete_page:CheckoutCompletePage):
     download=checkout_complete_page.download_pdf()
     assert download.suggested_filename.endswith(".pdf")
+
+@pytest.mark.regression
+def test_tc_chkc_05_pdf_button_not_offered_after_reload(checkout_complete_page):
+    expect(checkout_complete_page.pdf_button).to_be_visible()
+    checkout_complete_page.reload()
+    expect(checkout_complete_page.pdf_button).to_have_count(0)

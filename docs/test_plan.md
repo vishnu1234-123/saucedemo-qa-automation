@@ -96,7 +96,7 @@ Checkout data: use dummy values only (for example first name `Test`, last name `
 - Test data identified
 
 **Exit** (status on 2026-10-26)
-- All test cases executed and results recorded: 42 of 43 done; TC-CHKC-04 pending
+- All test cases executed and results recorded: all 44 done
 - Every failed case has a linked defect in Azure DevOps: done (Section 12)
 - No Severity 1 or 2 defect left untriaged: done
 - Automated suite passing in CI on the agreed browsers, apart from tests marked as expected failures that reference a known defect: done (Chromium, Firefox, WebKit green)
@@ -135,7 +135,7 @@ Final ratings follow the guidance of the mentor or team lead when it differs.
 
 ## 10. Test cases
 
-Legend: all cases are automated in this repo, except TC-CHKC-04 (pending). Priority: **P1** critical path, **P2** important, **P3** minor. Suite: smoke (S) and regression (R). Result: **Pass**, **Fail\*** (known defect; the test is an expected failure tied to the bug ID) or **Not run**. Test cases that began as manual cases were automated on 2026-10-22 to 2026-10-24.
+Legend: all cases are automated in this repo. Priority: **P1** critical path, **P2** important, **P3** minor. Suite: smoke (S) and regression (R). Result: **Pass**, **Fail\*** (known defect; the test is an expected failure tied to the bug ID) or **Not run**. Test cases that began as manual cases were automated on 2026-10-22 to 2026-10-24.
 
 ### 10.1 Login (`TC-LOGIN`)
 
@@ -210,11 +210,12 @@ Observation: the form reports only one missing field at a time (in field order).
 | TC-CHKC-01 | Complete a purchase (happy path) | A | P1 | S, R | Confirmation message shown |
 | TC-CHKC-02 | Back Home returns to Products | A | P3 | R | Products page |
 | TC-CHKC-03 | Cart is empty after the order | A | P2 | R | No badge |
-| TC-CHKC-04 | Generate PDF order downloads a PDF | pending | P3 | R | A .pdf file downloads. **Not run**: the PDF button appeared after the site changed; test and page-object method pending |
+| TC-CHKC-04 | Generate PDF order downloads a PDF | A | P3 | R | A .pdf file downloads |
+| TC-CHKC-05 | Generate PDF button is not offered after a reload | A | P3 | R | Button is gone after reloading the page (observation, see below) |
 
-**Totals:** 43 test cases. 40 pass, 2 fail as known defects (both bug 35), 1 not run (TC-CHKC-04). 42 are automated; TC-CHKC-04 is pending. Plus the 17 accessibility checks below.
+**Totals:** 44 test cases, all automated. 42 pass and 2 fail as known defects (both bug 35). Plus the 17 accessibility checks below.
 
-Observations (not defects): the cart allows only one of each product (by design of the site); the checkout form reports one missing field at a time.
+Observations (not defects): the Generate PDF button appears only once, straight after the order completes; after a reload it is gone, so the receipt cannot be downloaded again (TC-CHKC-05; no stated requirement, so not logged as a bug); the cart allows only one of each product (by design of the site); the checkout form reports one missing field at a time.
 
 ## 11. Accessibility checks (`TC-A11Y`)
 
@@ -272,7 +273,7 @@ All seven pages have been tested for accessibility.
 | BrowserStack trial limits | Limited cross-browser runs | Use the trial only for a smoke and accessibility subset |
 | Automated tools disagree or give false positives | Wrong defects logged | Verify every automated finding manually before logging |
 | Severity ratings differ from a team's standard | Defect priority is disputed | Scale and rating questions documented in Section 8; confirm with the mentor |
-| Azure Test Plans is a paid add-on | Cannot use native test plans for long | Use the 30-day trial at the end, once the 43 cases are final; keep the traceability matrix as the permanent record |
+| Azure Test Plans is a paid add-on | Cannot use native test plans for long | Use the 30-day trial at the end, once the 44 cases are final; keep the traceability matrix as the permanent record |
 | Standard question: WCAG 2.1 or 2.2 AA | Scope of criteria differs | Tested against 2.1 AA; any 2.2 observations noted separately |
 | The site changed during testing (new Dynamic Catalog menu item and PDF button) | Results may not cover new features | Test dates recorded; new items logged as open work (Section 14) |
 
@@ -280,16 +281,16 @@ All seven pages have been tested for accessibility.
 
 | Item | Status |
 | --- | --- |
-| Page objects, 42 of 43 functional tests | Done |
+| Page objects, 44 functional tests | Done |
 | Accessibility automation (axe plus custom checks) and 10 expected-failure checks | Done |
 | GitHub Actions on Chromium, Firefox, WebKit (push, pull request, nightly) | Done, green |
 | Traceability matrix | Done (`docs/traceability-matrix.xlsx`) |
-| TC-CHKC-04 (PDF download) and the Dynamic Catalog menu item | Pending |
+| Dynamic Catalog menu item | Pending |
 | README | In progress |
 | NVDA, JAWS, TalkBack and BrowserStack real-device runs | Planned |
 | ACR on the VPAT template | After the screen reader runs |
 | Persona tests, Docker image, Allure or HTML report | Optional |
-| Azure Test Plans (30-day trial) | Last, after the 43 cases are final |
+| Azure Test Plans (30-day trial) | Last, after the 44 cases are final |
 
 ## 15. Deliverables
 

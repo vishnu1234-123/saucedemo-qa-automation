@@ -6,7 +6,7 @@ Functional and accessibility test automation for [saucedemo.com](https://www.sau
 
 ## What this project shows
 
-- **Functional testing:** 43 test cases across login, products, cart and checkout, automated with Playwright (Python) and pytest using the Page Object Model.
+- **Functional testing:** 44 test cases across login, products, cart and checkout, automated with Playwright (Python) and pytest using the Page Object Model.
 - **Accessibility testing:** 17 WCAG checks. Automated with axe-core and custom Playwright checks, plus a manual audit with keyboard, VoiceOver, Colour Contrast Analyser and axe DevTools.
 - **Defect management:** 12 bugs logged in Azure DevOps, one per root cause, each linked to the affected pages and the test that proves it.
 - **CI:** GitHub Actions runs the suite on Chromium, Firefox and WebKit on every push, pull request and nightly.
