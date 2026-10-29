@@ -40,7 +40,17 @@ jobs:
           --output test-results/artifacts-$(browser)
           -v
         displayName: 'Run Pytest on $(browser)'
-
+      - script: >
+          python tools/sync_results_to_azure.py
+          --junit "test-results/results-chromium.xml"
+          --org $(System.CollectionUri)
+          --project $(System.TeamProject)
+          --plan 36
+          --run-name "Pipeline $(Build.BuildNumber)"
+        displayName: 'Sync results to Azure Test Plans'
+        condition: and(succeededOrFailed(), eq(variables['browser'], 'chromium'))
+        env:
+          ADO_PAT: $(ADO_PAT)
       - task: PublishTestResults@2
         displayName: 'Publish Test results'
         condition: succeededOrFailed()
