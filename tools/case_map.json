@@ -1,0 +1,168 @@
+{
+    "TC-LOGIN-01": [
+     "test_login::test_valid_login"
+    ],
+    "TC-LOGIN-02": [
+     "test_login::test_locked_out_user"
+    ],
+    "TC-LOGIN-03a": [
+     "test_login::test_invalid_credentials[wrong_password]"
+    ],
+    "TC-LOGIN-03b": [
+     "test_login::test_invalid_credentials[wrong_username]"
+    ],
+    "TC-LOGIN-03c": [
+     "test_login::test_invalid_credentials[both_wrong]"
+    ],
+    "TC-LOGIN-04a": [
+     "test_login::test_required_fields[both_blank]"
+    ],
+    "TC-LOGIN-04b": [
+     "test_login::test_required_fields[username_blank]"
+    ],
+    "TC-LOGIN-04c": [
+     "test_login::test_required_fields[password_blank]"
+    ],
+    "TC-LOGIN-05": [
+     "test_login::test_tc_login_05_password_is_masked"
+    ],
+    "TC-LOGIN-06": [
+     "test_login::test_tc_login_06_error_can_be_dismissed"
+    ],
+    "TC-LOGIN-07": [
+     "test_login::test_tc_login_07_direct_url_blocked_when_logged_out"
+    ],
+    "TC-INV-01": [
+     "test_inventory::test_inventory_lists_six_products"
+    ],
+    "TC-INV-02a": [
+     "test_inventory::test_sort_orders[name_az]"
+    ],
+    "TC-INV-02b": [
+     "test_inventory::test_sort_orders[name_za]"
+    ],
+    "TC-INV-02c": [
+     "test_inventory::test_sort_orders[price_lohi]"
+    ],
+    "TC-INV-02d": [
+     "test_inventory::test_sort_orders[price_hilo]"
+    ],
+    "TC-INV-03": [
+     "test_inventory::test_add_item_update_badge"
+    ],
+    "TC-INV-04": [
+     "test_inventory::test_add_two_then_remove_one"
+    ],
+    "TC-INV-05": [
+     "test_inventory::test_remove_last_item_clears_badge"
+    ],
+    "TC-INV-06": [
+     "test_inventory::test_logout"
+    ],
+    "TC-INV-07": [
+     "test_inventory::test_tc_inv_07_open_product_details"
+    ],
+    "TC-INV-08": [
+     "test_inventory::test_tc_inv_08_reset_app_state_resets_buttons"
+    ],
+    "TC-INV-09": [
+     "test_inventory::test_tc_inv_09_cart_persists_across_pages"
+    ],
+    "TC-CART-01": [
+     "test_cart::test_cart_shows_added_items"
+    ],
+    "TC-CART-02": [
+     "test_cart::test_remove_item_from_cart"
+    ],
+    "TC-CART-03": [
+     "test_cart::test_continue_shopping_return_to_products"
+    ],
+    "TC-CART-04": [
+     "test_cart::test_tc_cart_04_cart_matches_product_list"
+    ],
+    "TC-CART-05": [
+     "test_cart::test_tc_cart_05_reset_app_state_empties_cart"
+    ],
+    "TC-CHKI-01a": [
+     "test_checkout_information::test_required_fields[first_blank]"
+    ],
+    "TC-CHKI-01b": [
+     "test_checkout_information::test_required_fields[last_blank]"
+    ],
+    "TC-CHKI-01c": [
+     "test_checkout_information::test_required_fields[postal_blank]"
+    ],
+    "TC-CHKI-01d": [
+     "test_checkout_information::test_required_fields[first_and_last_blank]"
+    ],
+    "TC-CHKI-01e": [
+     "test_checkout_information::test_required_fields[first_and_postal_blank]"
+    ],
+    "TC-CHKI-01f": [
+     "test_checkout_information::test_required_fields[last_and_postal_blank]"
+    ],
+    "TC-CHKI-01g": [
+     "test_checkout_information::test_required_fields[all_blank]"
+    ],
+    "TC-CHKI-02": [
+     "test_checkout_information::test_tc_chki_02_cancel_returns_to_cart"
+    ],
+    "TC-CHKO-01": [
+     "test_checkout_overview::test_order_total_is_subtotal_plus_tax"
+    ],
+    "TC-CHKO-02": [
+     "test_checkout_overview::test_tc_chko_02_items_match_cart"
+    ],
+    "TC-CHKO-03": [
+     "test_checkout_overview::test_tc_chko_03_cancel_returns_to_products"
+    ],
+    "TC-CHKC-01": [
+     "test_checkout_complete::test_checkout_happy_path"
+    ],
+    "TC-CHKC-02": [
+     "test_checkout_complete::test_tc_chkc_02_back_home_returns_to_products"
+    ],
+    "TC-CHKC-03": [
+     "test_checkout_complete::test_tc_chkc_03_cart_empty_after_order"
+    ],
+    "TC-CHKC-04": [
+     "test_checkout_complete::test_tc_chkc_04_generate_pdf_downloads_file"
+    ],
+    "TC-CHKC-05": [
+     "test_checkout_complete::test_tc_chkc_05_pdf_button_not_offered_after_reload"
+    ],
+    "TC-A11Y-01": [
+     "test_a11y::*"
+    ],
+    "TC-A11Y-02": [
+     "test_a11y_checks::test_tc_a11y_02_*"
+    ],
+    "TC-A11Y-03": [
+     "test_a11y_checks::test_tc_a11y_03_*"
+    ],
+    "TC-A11Y-04": [
+     "test_a11y_checks::test_tc_a11y_04_*"
+    ],
+    "TC-A11Y-05": [
+     "test_a11y_checks::test_tc_a11y_05_*"
+    ],
+    "TC-A11Y-06": [
+     "test_a11y_checks::test_tc_a11y_06_*"
+    ],
+    "TC-A11Y-07a": [
+     "test_a11y_forms::test_tc_a11y_07_login_has_label*",
+     "test_a11y_forms::test_tc_a11y_07_checkout_has_label*"
+    ],
+    "TC-A11Y-07b": [
+     "test_a11y_forms::test_tc_a11y_07_*_required_indicated*"
+    ],
+    "TC-A11Y-08": [
+     "test_a11y_forms::test_tc_a11y_08_*"
+    ],
+    "TC-A11Y-10": [
+     "test_a11y_checks::test_tc_a11y_10_*"
+    ],
+    "TC-A11Y-11": [
+     "test_a11y_checks::test_tc_a11y_11_*"
+    ]
+}
