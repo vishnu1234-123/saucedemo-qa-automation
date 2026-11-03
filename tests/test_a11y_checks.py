@@ -8,8 +8,9 @@ from pages.checkout_info_page import CheckoutInfoPage
 from pages.inventory_page import InventoryPage
 from pages.checkout_overview_page import CheckoutOverviewPage
 from pages.login_page import LoginPage
+from helpers.dynamic_catalog import DYNAMIC,open_dynamic
 
-PAGES=["login","products","details","cart","checkout_info","checkout_overview","checkout_complete"]
+PAGES=["login","products","details","cart","checkout_info","checkout_overview","checkout_complete","lazy_load","spinner","slider"]
 STATUS_REGION='[role="status"],[role="alert"],[aria-live="polite"],[aria-live="assertive"]'
 
 pytestmark=pytest.mark.a11y
@@ -23,6 +24,10 @@ def on_page(request,page:Page,login_page):
     login_page.login(STANDARD_USER,PASSWORD)
     inv=InventoryPage(page)
     inv.title.wait_for()
+    if name in DYNAMIC:
+        open_dynamic(page,inv,name)
+        return name
+
     if name=="details":
         inv.open_first_product()
         return name
@@ -114,8 +119,30 @@ def test_tc_a11y_04_focus_stays_in_open_menu(page:Page,on_page):
     for _ in range(8):
         page.keyboard.press("Tab")
         focused.append(
-            "() => { const e = document.activeElement; "
-            "return (e.getAttribute('aria-label') || e.textContent || e.value || '').trim(); }"
-
+            page.evaluate(
+                "() => { const e = document.activeElement; "
+                "return (e.getAttribute('aria-label') || e.textContent || e.value || '').trim(); }"
+            )
         )
-    assert set(focused)<=MENU_LABELS,focused
+    assert set(focused)<=MENU_LABELS
+
+
+
+def test_tc_a11y_17_page_has_one_main_landmark(request,page:Page,on_page):
+    if on_page in DYNAMIC:
+        request.applymarker(pytest.mark.xfail(raises=AssertionError,strict=True,reason="ADO-110: no main landmark (best practice)"))
+    assert page.locator("main, [role='main']").count()==1
+
+@pytest.mark.xfail(raises=AssertionError,strict=True,reason="ADO-113: slider moves automatically and cannot be paused (2.2.2)")
+def test_tc_a11y_18_moving_content_can_be_paused(page:Page,inventory_page:InventoryPage):
+    open_dynamic(page,inventory_page,"slider")
+    if page.get_by_role("button",name=re.compile("pause|stop",re.I)).count():
+        return 
+    name=page.locator('[data-test="dynamic-catalog-slider-item-name"]')
+    name.first.wait_for()
+    seen=set()
+    for _ in range(16):
+        seen.add(name.first.inner_text())
+        page.wait_for_timeout(500)
+    assert len(seen)==1,seen
+

@@ -6,15 +6,17 @@ Functional and accessibility test automation for [saucedemo.com](https://www.sau
 
 ## What this project shows
 
-- **Functional testing:** 44 test cases across login, products, cart and checkout, automated with Playwright (Python) and pytest using the Page Object Model.
-- **Accessibility testing:** 17 WCAG checks. Automated with axe-core and custom Playwright checks, plus a manual audit with keyboard, VoiceOver, Colour Contrast Analyser and axe DevTools.
-- **Defect management:** 12 bugs logged in Azure DevOps, one per root cause, each linked to the affected pages and the test that proves it.
+- **Functional testing:** 45 test cases across login, products, cart, checkout and the Dynamic Catalog spinner, automated with Playwright (Python) and pytest using the Page Object Model.
+- **Accessibility testing:** 20 WCAG checks. Automated with axe-core and custom Playwright checks, plus a manual audit with keyboard, VoiceOver, Colour Contrast Analyser and axe DevTools.
+- **Defect management:** 15 bugs logged in Azure DevOps, one per root cause, each linked to the affected pages, and to an automated test where one exists.
 - **CI:** GitHub Actions runs the suite on Chromium, Firefox and WebKit on every push, pull request and nightly.
 - **Traceability:** a matrix linking test cases, WCAG criteria, pages and bugs (`docs/traceability-matrix.xlsx`).
 
 ## Findings in brief
 
 The site passes automated axe checks for WCAG A and AA, but a manual audit found accessibility barriers that axe, WAVE and Lighthouse did not report. Examples: no visible focus indicator, a cart icon that can't be reached with the keyboard, a menu button that doesn't expose its state, page titles that are the same on every page, and focus that leaves the open menu. An automated scan passing does not mean a site is accessible.
+
+The three Dynamic Catalog pages (Lazy Load, Spinner, Slider) were audited manually and add three more findings: a footer that can't be reached, no main landmark, and a carousel that moves on its own with no way to pause it.
 
 The full list is in `docs/traceability-matrix.xlsx` (Defects sheet).
 
@@ -86,8 +88,8 @@ Note: the WebKit job uses the Playwright WebKit build on Linux. It is not real S
 |---|---|---|
 | Chromium, Firefox, WebKit (Playwright) | CI and local | Done |
 | macOS + Safari + VoiceOver | Manual | Done |
-| Windows + NVDA (Firefox, Chrome) | Manual | Planned |
-| Windows + JAWS (Chrome) | Manual | Planned |
+| Windows + NVDA (Firefox, Chrome) | Manual | Spot checks done |
+| Windows + JAWS (Chrome) | Manual | Spot checks done |
 | iPhone Safari, Android Chrome, TalkBack | BrowserStack real devices | Planned |
 
 ## Documents

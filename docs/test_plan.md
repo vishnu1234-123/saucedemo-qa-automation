@@ -2,9 +2,9 @@
 
 | | |
 | --- | --- |
-| **Version** | 1.0 |
-| **Date** | 2026-10-26 |
-| **Test execution** | 2026-10-21 to 2026-10-26 |
+| **Version** | 1.1 |
+| **Date** | 2026-11-03 |
+| **Test execution** | 2026-10-21 to 2026-11-03 |
 | **Author** | Vishnu |
 | **Application under test** | https://www.saucedemo.com (public demo shopping app) |
 | **Repository** | `saucedemo-qa-automation` (this repo) |
@@ -21,7 +21,7 @@ This is a practice project on a public demo site. Fixing defects is out of scope
 ## 2. Scope
 
 **In scope**
-- Pages: Login, Products (inventory), Cart, Checkout: Your Information, Checkout: Overview, Checkout: Complete, Product details, and the slide-in menu (including the Dynamic Catalog item that appeared during testing, not yet explored)
+- Pages: Login, Products (inventory), Cart, Checkout: Your Information, Checkout: Overview, Checkout: Complete, Product details, the slide-in menu, and the three Dynamic Catalog pages that appeared during testing (Lazy Load, Spinner, Slider), which were audited manually for accessibility
 - Functional testing: login, sorting, add/remove items, cart, checkout form validation, order totals, logout
 - Accessibility testing against WCAG 2.1 AA on every page
 - Cross-browser testing: Chromium, Firefox, WebKit (see Section 5)
@@ -96,7 +96,7 @@ Checkout data: use dummy values only (for example first name `Test`, last name `
 - Test data identified
 
 **Exit** (status on 2026-10-26)
-- All test cases executed and results recorded: all 44 done
+- All test cases executed and results recorded: all 45 done (TC-SPIN-01 to be confirmed on the next full run)
 - Every failed case has a linked defect in Azure DevOps: done (Section 12)
 - No Severity 1 or 2 defect left untriaged: done
 - Automated suite passing in CI on the agreed browsers, apart from tests marked as expected failures that reference a known defect: done (Chromium, Firefox, WebKit green)
@@ -213,7 +213,13 @@ Observation: the form reports only one missing field at a time (in field order).
 | TC-CHKC-04 | Generate PDF order downloads a PDF | A | P3 | R | A .pdf file downloads |
 | TC-CHKC-05 | Generate PDF button is not offered after a reload | A | P3 | R | Button is gone after reloading the page (observation, see below) |
 
-**Totals:** 44 test cases, all automated. 42 pass and 2 fail as known defects (both bug 35). Plus the 17 accessibility checks below.
+### 10.7 Dynamic Catalog (`TC-SPIN`)
+
+| ID | Title | Type | Priority | Suite | Expected result |
+| --- | --- | --- | --- | --- | --- |
+| TC-SPIN-01 | Products appear after the loading state ends | A | P2 | R | Loading status disappears; six products are shown |
+
+**Totals:** 45 test cases, all automated. 42 pass and 2 fail as known defects (both bug 35); TC-SPIN-01 is new and not yet confirmed in a full run. Plus the 20 accessibility checks below.
 
 Observations (not defects): the Generate PDF button appears only once, straight after the order completes; after a reload it is gone, so the receipt cannot be downloaded again (TC-CHKC-05; no stated requirement, so not logged as a bug); the cart allows only one of each product (by design of the site); the checkout form reports one missing field at a time.
 
@@ -240,8 +246,11 @@ Run on every page (all seven pages were tested). Results as of 2026-10-26. Autom
 | TC-A11Y-13 | Zoom to 200% and 400% without loss of content | 1.4.4, 1.4.10 | Browser zoom | manual | Pass | |
 | TC-A11Y-14 | Images have appropriate alternative text | 1.1.1 | DOM check, VoiceOver | manual | Pass | |
 | TC-A11Y-15 | Text spacing: no loss of content or function | 1.4.12 | Style override | manual | Pass | observation: long text overflows a card edge |
+| TC-A11Y-16 | Footer is visible when reached by keyboard | 2.4.7 | Tab to the footer links | manual (timing-dependent) | Fail | 109 |
+| TC-A11Y-17 | Page has one main landmark | best practice | axe DevTools, VoiceOver landmarks, DOM | xfail on the 3 Dynamic Catalog pages | Fail | 110 |
+| TC-A11Y-18 | Moving content can be paused, stopped or hidden | 2.2.2 | Watch the slider; look for a pause control | xfail | Fail | 113 |
 
-Totals: 17 checks, 7 pass, 10 fail (each with a bug). Axe passes while 10 manual and custom checks fail: automated scanners alone missed these barriers.
+Totals: 20 checks, 6 pass, 14 fail (each with a bug). Axe passes while 14 manual and custom checks fail: automated scanners alone missed these barriers.
 
 ## 12. Defects
 
@@ -249,20 +258,35 @@ Logged in Azure DevOps, one bug per root cause. Each is encoded as an expected-f
 
 | ADO ID | WCAG SC | Summary | Pages affected | Severity | Priority |
 | --- | --- | --- | --- | --- | --- |
-| 10 | 2.4.7 | No visible focus indicator on any interactive control | All 7 | 2 | 2 |
+| 10 | 2.4.7 | No visible focus indicator on any interactive control | All 10 | 2 | 2 |
 | 11 | 1.4.11 | Login field boundary contrast too low | Login | 3 | 3 |
 | 12 | 3.3.2 | Form fields have no persistent visible labels (placeholder only) | Login, Checkout information | 3 | 3 |
 | 13 | 1.3.5 | Form fields do not identify input purpose (no `autocomplete`) | Login, Checkout information | 4 | 4 |
-| 14 | 2.4.2 | Page title is "Swag Labs" on every page | All 7 | 3 | 3 |
-| 15 | 1.3.1 | No h1; page names are not marked up as headings | All 7 | 3 | 3 |
-| 16 | 2.1.1 | Cart icon cannot be reached with Tab | 6 (all after login) | 1 | 1 |
-| 18 | 4.1.2 | Menu button does not expose expanded or collapsed state | 6 (all after login) | 3 | 2 |
+| 14 | 2.4.2 | Page title is "Swag Labs" on every page | All 10 | 3 | 3 |
+| 15 | 1.3.1 | No h1; page names are not marked up as headings | All 10 | 3 | 3 |
+| 16 | 2.1.1 | Cart icon cannot be reached with Tab | 9 (all after login) | 1 | 1 |
+| 18 | 4.1.2 | Menu button does not expose expanded or collapsed state | 9 (all after login) | 3 | 2 |
 | 19 | 4.1.3 | Adding or removing an item is not announced | Products, Product details, Cart | 3 | 2 |
-| 20 | 2.4.3 | Keyboard focus leaves the open menu | 6 (all after login) | 3 | 2 |
+| 20 | 2.4.3 | Keyboard focus leaves the open menu | 9 (all after login) | 3 | 2 |
 | 26 | 3.3.2 | Required fields are not indicated before submission | Login, Checkout information | 3 | 3 |
+| 109 | 2.4.7 | Footer can be reached with Tab but is not visible (focus lands on content that is off screen) | Dynamic Catalog - Lazy Load | 3 | 3 |
+| 110 | Best practice | No main landmark; content is outside all landmarks (axe `landmark-one-main`, `region`) | Dynamic Catalog - Lazy Load, Spinner, Slider | 4 | 4 |
+| 113 | 2.2.2 | Slider: products slide automatically and cannot be paused, stopped or hidden | Dynamic Catalog - Slider | 2 | 2 |
 | 35 | Functional | Reset App State clears the cart count but the page is not updated; an order can still be placed | Products, Product details, Cart, Checkout overview | 2 | 2 |
 
-All seven pages have been tested for accessibility.
+All ten pages have been tested for accessibility. The seven original pages have automated checks; the three Dynamic Catalog pages were audited manually (axe DevTools, keyboard, VoiceOver, with spot checks in NVDA and JAWS), and automated tests for them are still to do.
+
+### 12.1 Dynamic Catalog pages (manual audit, 2026-10-31 to 2026-11-03)
+
+| Page | New bugs | Existing bugs it also hits |
+| --- | --- | --- |
+| Lazy Load | 109 (footer not visible), 110 (landmarks) | 10, 14, 15, 16, 18, 20 |
+| Spinner | 110 | 10, 14, 15, 16, 18, 20 |
+| Slider | 110, 113 (auto-moving, no pause) | 10, 14, 15, 16, 18, 20 |
+
+Observations (not defects): the product cards are display-only `<div>`s, not interactive, and have no hover effect; the alt text and the product name are the same string, so a screen reader reads the product twice; the Lazy Load list has no upper limit; the slider's dot buttons are real buttons with accessible names ("Show Sauce Labs Bike Light"); the Login credentials help panel sits outside the landmarks (test helper, minor). the Spinner page is a static list with one entry per product (no size variants, unlike Lazy Load), the cards are not clickable, and each image is a real `<img>`. On a slow connection (Slow 3G) it shows a loading circle, marked up as `<div role="status" aria-label="Loading">`, which is the correct pattern, so 4.1.3 passes. Observation: the status has no text content, only a label, and VoiceOver announces "loading" when arriving from another page but not on a reload of the same page. The spinner ends by itself when loading finishes, so 2.2.2 does not apply.
+
+Screen reader spot checks: JAWS announces the login fields from their placeholder text (supports bugs 12 and 26); JAWS finds no headings on Products (bug 15); JAWS never lands on the cart icon (bug 16); on the Slider JAWS reads the dot button while the slide moves on (bug 113).
 
 ## 13. Risks and mitigations
 
@@ -273,7 +297,7 @@ All seven pages have been tested for accessibility.
 | BrowserStack trial limits | Limited cross-browser runs | Use the trial only for a smoke and accessibility subset |
 | Automated tools disagree or give false positives | Wrong defects logged | Verify every automated finding manually before logging |
 | Severity ratings differ from a team's standard | Defect priority is disputed | Scale and rating questions documented in Section 8; confirm with the mentor |
-| Azure Test Plans is a paid add-on | Cannot use native test plans for long | Use the 30-day trial at the end, once the 44 cases are final; keep the traceability matrix as the permanent record |
+| Azure Test Plans is a paid add-on | Cannot use native test plans for long | Use the 30-day trial at the end, once the 45 cases are final; keep the traceability matrix as the permanent record |
 | Standard question: WCAG 2.1 or 2.2 AA | Scope of criteria differs | Tested against 2.1 AA; any 2.2 observations noted separately |
 | The site changed during testing (new Dynamic Catalog menu item and PDF button) | Results may not cover new features | Test dates recorded; new items logged as open work (Section 14) |
 
@@ -281,16 +305,16 @@ All seven pages have been tested for accessibility.
 
 | Item | Status |
 | --- | --- |
-| Page objects, 44 functional tests | Done |
+| Page objects, 45 functional tests | Done |
 | Accessibility automation (axe plus custom checks) and 10 expected-failure checks | Done |
 | GitHub Actions on Chromium, Firefox, WebKit (push, pull request, nightly) | Done, green |
 | Traceability matrix | Done (`docs/traceability-matrix.xlsx`) |
-| Dynamic Catalog menu item | Pending |
+| Dynamic Catalog pages (Lazy Load, Spinner, Slider) | Audited manually, 3 bugs logged; automated tests and Spinner checks pending |
 | README | In progress |
 | NVDA, JAWS, TalkBack and BrowserStack real-device runs | Planned |
 | ACR on the VPAT template | After the screen reader runs |
 | Persona tests, Docker image, Allure or HTML report | Optional |
-| Azure Test Plans (30-day trial) | Last, after the 44 cases are final |
+| Azure Test Plans (30-day trial) | Last, after the 45 cases are final |
 
 ## 15. Deliverables
 
@@ -310,7 +334,7 @@ Decided:
 Open:
 1. At what severity should a missing page title or heading structure be rated when the visible heading is announced by a screen reader?
 2. Should functional observations that are not WCAG failures (for example, one error message at a time) be listed in the report?
-3. What does the Dynamic Catalog menu item do, and does it need test cases?
+3. Should the three Dynamic Catalog pages get automated tests (a strict-xfail test for the footer and landmark bugs), or stay manual?
 
 ## Appendix: running the tests
 
