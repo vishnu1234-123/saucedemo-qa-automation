@@ -141,7 +141,7 @@ def test_tc_a11y_18_moving_content_can_be_paused(page:Page,inventory_page:Invent
     name=page.locator('[data-test="dynamic-catalog-slider-item-name"]')
     name.first.wait_for()
     seen=set()
-    for _ in range(16):
+    for _ in range(24):
         seen.add(name.first.inner_text())
         page.wait_for_timeout(500)
     assert len(seen)==1,seen

@@ -96,7 +96,7 @@ Checkout data: use dummy values only (for example first name `Test`, last name `
 - Test data identified
 
 **Exit** (status on 2026-10-26)
-- All test cases executed and results recorded: all 45 done (TC-SPIN-01 to be confirmed on the next full run)
+- All test cases executed and results recorded: all 45 done
 - Every failed case has a linked defect in Azure DevOps: done (Section 12)
 - No Severity 1 or 2 defect left untriaged: done
 - Automated suite passing in CI on the agreed browsers, apart from tests marked as expected failures that reference a known defect: done (Chromium, Firefox, WebKit green)
@@ -219,7 +219,7 @@ Observation: the form reports only one missing field at a time (in field order).
 | --- | --- | --- | --- | --- | --- |
 | TC-SPIN-01 | Products appear after the loading state ends | A | P2 | R | Loading status disappears; six products are shown |
 
-**Totals:** 45 test cases, all automated. 42 pass and 2 fail as known defects (both bug 35); TC-SPIN-01 is new and not yet confirmed in a full run. Plus the 20 accessibility checks below.
+**Totals:** 45 test cases, all automated. 43 pass and 2 fail as known defects (both bug 35). Plus the 20 accessibility checks below.
 
 Observations (not defects): the Generate PDF button appears only once, straight after the order completes; after a reload it is gone, so the receipt cannot be downloaded again (TC-CHKC-05; no stated requirement, so not logged as a bug); the cart allows only one of each product (by design of the site); the checkout form reports one missing field at a time.
 
@@ -287,6 +287,31 @@ All ten pages have been tested for accessibility. The seven original pages have 
 Observations (not defects): the product cards are display-only `<div>`s, not interactive, and have no hover effect; the alt text and the product name are the same string, so a screen reader reads the product twice; the Lazy Load list has no upper limit; the slider's dot buttons are real buttons with accessible names ("Show Sauce Labs Bike Light"); the Login credentials help panel sits outside the landmarks (test helper, minor). the Spinner page is a static list with one entry per product (no size variants, unlike Lazy Load), the cards are not clickable, and each image is a real `<img>`. On a slow connection (Slow 3G) it shows a loading circle, marked up as `<div role="status" aria-label="Loading">`, which is the correct pattern, so 4.1.3 passes. Observation: the status has no text content, only a label, and VoiceOver announces "loading" when arriving from another page but not on a reload of the same page. The spinner ends by itself when loading finishes, so 2.2.2 does not apply.
 
 Screen reader spot checks: JAWS announces the login fields from their placeholder text (supports bugs 12 and 26); JAWS finds no headings on Products (bug 15); JAWS never lands on the cart icon (bug 16); on the Slider JAWS reads the dot button while the slide moves on (bug 113).
+
+
+### 12.2 Screen reader comparison (NVDA and JAWS on Windows)
+
+Tested 2026-11-03 and 2026-11-04 on Windows with NVDA (Microsoft Edge) and the JAWS demo. VoiceOver on macOS was used for the earlier audit. NVDA and JAWS agree on every barrier; only the wording differs (for example 'protected' on the password field).
+
+| # | Page | Check | NVDA (Edge) | JAWS | Same? | Bug |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Login | Tab to username | Username, edit, has auto complete; name from placeholder; no 'required' | username, edit, has popup, placeholder, type in text; no 'required' | Same | 12, 26 |
+| 2 | Login | Tab to password | Password, edit, password, protected, blank (name twice) | password, password, edit, type in text (name twice, no 'protected') | Same except 'protected' | 12, 26 |
+| 3 | Login | Submit blank fields | alert error, Epic sadface: Username is required | dismiss error, Epic sadface: Username is required | Same (announced) | Pass (3.3.1) |
+| 4 | Login | Landmarks | Main only | Main only | Same | note |
+| 5 | Products | Headings | None | No headings found | Same | 15 |
+| 6 | Products | Tab to the cart | Not reached by Tab; found only in the Elements list | Not reached by Tab | Same | 16 |
+| 7 | Products | Menu button state | 'Open Menu button', no state | No 'collapsed' or 'expanded' | Same | 18 |
+| 8 | Products | Add to cart | Nothing after Enter; 'Remove button' is read only when you Tab back to it; cart count not announced | Says only 'Enter'; nothing about the button change or the count | Same (change not announced) | 19 |
+| 9 | Products | Tab 8 times in the open menu | Menu stays open; focus leaves the open menu | Menu stays open; after the Close button focus moves to Sort products | Same bug | 20 |
+| 10 | Product details | Page title | Swag Labs document | Not checked by screen reader; title confirmed with document.title | Confirmed in tests | 14 |
+| 11 | Checkout information | Submit blank fields | alert error, First Name is required | dismiss error, First Name is required | Same (announced) | Pass (3.3.1) |
+| 12 | Lazy Load | Landmarks | Banner and contentinfo; no main | Banner and contentinfo; no main | Same | 110 |
+| 13 | Lazy Load | Scroll to load more items | Not announced | Not announced in browse mode; Tab from the menu goes to the footer X link | Same | observation |
+| 14 | Slider | Stay on a product | Slide changes by itself; 'current' is announced when the slider returns to the focused item | Slide changes by itself while focus is on one product | Same | 113 |
+| 15 | Spinner | Open the page | No announcement | No announcement | Same | new bug (loading status) |
+
+Notes: neither reader says "required" on any form field (bug 26). Both take the field name from the placeholder (bug 12). Neither announces the cart change after Add to cart (bug 19). The Spinner status (`role="status"` with a label but no text) is not announced by NVDA or JAWS and only inconsistently by VoiceOver, so it is logged as a separate bug.
 
 ## 13. Risks and mitigations
 
