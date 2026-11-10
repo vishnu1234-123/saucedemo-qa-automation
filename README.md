@@ -99,6 +99,6 @@ Note: the WebKit job uses the Playwright WebKit build on Linux. It is not real S
 - `docs/acr.*`: accessibility conformance report (VPAT format) *(in progress)*
 
 ## Notes
-
+- [Accessibility Conformance Report (WCAG 2.2 A/AA, PDF)](docs/acr/Sauce_Demo_Accessibility_Conformance_Report_WCAG22.pdf)
 - The target site is a public practice site and can change. Test dates are recorded in the test plan.
 - Bugs are filed by hand, not created automatically from test failures.
